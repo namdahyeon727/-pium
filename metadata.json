@@ -1,0 +1,6 @@
+{
+  "name": "초등 발표 계획서 도우미 - 피움이",
+  "description": "초등학교 5학년 학생들의 실과 단원 활동인 '디지털 콘텐츠 저작 도구로 발표 자료 만들기'를 도와주는 다정하고 따뜻한 AI 학습 조력자 피움이입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

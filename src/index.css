@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-gaegu: "Gaegu", cursive;
+}
+
+:root {
+  --bg: #FFFDF5;
+  --accent: #FF8FA3;
+  --soft-green: #D4E09B;
+  --warm-yellow: #FFD97D;
+  --ink: #432818;
+  --ink-light: #6E5340;
+  --border: #E2D9C8;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* Custom Artistic Flair classes */
+.handwriting {
+  font-family: var(--font-gaegu);
+}
+
+.chat-bubble {
+  border-radius: 20px;
+  box-shadow: 4px 4px 0px rgba(67, 40, 24, 0.08);
+}
+
+.plan-card {
+  background: white;
+  border: 2px dashed var(--border);
+  border-radius: 24px;
+  position: relative;
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #E2D9C8;
+}
+
+.step-dot.active {
+  background: var(--accent);
+  outline: 4px solid rgba(255, 143, 163, 0.2);
+}
