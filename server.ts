@@ -103,6 +103,88 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
+// Initial classmate plans
+const peersPlans = [
+  {
+    id: "plan-1",
+    studentName: "김태우",
+    keyword: "스마트폰",
+    subtopic: "지혜로운 스마트폰 사용과 눈 건강 지킴이 규칙",
+    motivation: "밤늦게 스마트폰을 자주 하다가 다음 날 수업시간에 눈이 너무 뻑뻑하고 아파서 해결하고 싶었습니다.",
+    core1: "스마트폰 화면에서 나오는 강한 블루라이트가 망막 피로를 유발하고 시력을 저하시키는 배경을 설명해요.",
+    core2: "20분 사용 후 20초간 20피트(약 6미터) 밖을 바라보며 눈 근육을 쉬어주는 '20-20-20' 실천 안과 규칙이에요.",
+    conclusion: "스마트폰 사용 시간도 똑똑한 어린이가 스스로 계획하고 실천해 나가면서 밝고 촉촉한 눈을 영원히 보존해요! 🤙",
+    createdAt: "2026-06-15 09:30"
+  },
+  {
+    id: "plan-2",
+    studentName: "박서윤",
+    keyword: "기후변화",
+    subtopic: "북극곰의 눈물을 닦아줄 수 있는 저탄소 녹색 실천 행동",
+    motivation: "환경 다큐멘터리에서 바다얼음이 다 녹아 쉴 곳이 없는 새끼 북극곰이 허우적거리는 것을 보고 눈물이 흘렀습니다.",
+    core1: "이산화탄소 증가율이 높아져 온실효과를 가중시키고 북극의 빙하 면적을 무서운 속도로 좁히는 현실을 고발합니다.",
+    core2: "종이컵 대신 마이 텀블러 사용하기와 대기 전력을 막기 위해 안 쓰는 에어컨, 가전 플러그를 끝까지 뽑는 예방책이에요.",
+    conclusion: "우리의 조그만 초록 약속 하나가 지름길에서 멸종 위기에 처한 우리 소중한 야생 동물 친구를 건강하게 지켜줍니다. 🐼",
+    createdAt: "2026-06-15 10:15"
+  },
+  {
+    id: "plan-3",
+    studentName: "이민준",
+    keyword: "바른 언어",
+    subtopic: "우리 반 고운 말 상자와 아름다운 감사의 교실 가판대",
+    motivation: "방과 후 급식실 앞 복도에서 친구들이 아무렇지 않게 거친 욕설과 상대방을 깎아내리는 비속어를 외치는 걸 듣고 깜짝 놀랐기 때문입니다.",
+    core1: "우리가 뜻도 모르고 장난처럼 사용하는 유행어, 비속어의 어원 속 나쁜 유래와 친구 마음의 상처 깊이를 파악해봐요.",
+    core2: "우리 교실 뒤편에 '고운 말 보관 상자'를 두어 친구에게 편지로 따뜻한 감사와 칭찬을 적는 고마운 우체통 운영입니다.",
+    conclusion: "얼굴을 찡그리게 하는 거친 말은 비우고, 친구의 마음 정원을 예쁜 꽃으로 가득 채울 수 있게 늘 소리 내어 고맙다고 인사합시다! 😊",
+    createdAt: "2026-06-15 11:05"
+  },
+  {
+    id: "plan-4",
+    studentName: "최하은",
+    keyword: "반려동물",
+    subtopic: "소중한 댕댕이와의 행복한 공존을 위한 펫티켓 가이드",
+    motivation: "동생과 아파트 단지 놀이터를 산책하던 도중 다른 사람의 반려견이 배변한 것을 치우지 않고 도망가서 사람들이 찌푸리는 광경을 보았기 때문입니다.",
+    core1: "공공장소에서 강아지 목줄 길이를 2미터 이내로 안전하게 유지하고 배변 봉투를 반드시 소지하여 뒤처리를 말끔히 하는 매너예요.",
+    core2: "한 번 들인 생명은 끝까지 사랑하며 절대 유기하지 않고, 끝까지 보살핀다는 듬직한 입양 서약서와 등록제 규칙 실천입니다.",
+    conclusion: "반려인은 예의를 지켜 칭찬받고, 비반려인은 동물을 배려하여 웃는, 모두가 평화롭고 따스한 아파트를 만들어요! 🐕",
+    createdAt: "2026-06-15 11:20"
+  }
+];
+
+// In-memory array of plans submitted in this session
+const plansDb = [...peersPlans];
+
+// Endpoint 3: Retrieve all classmate and peer plans
+app.get("/api/plans", (req, res) => {
+  res.json({ plans: plansDb });
+});
+
+// Endpoint 4: Add a new presentation plan
+app.post("/api/plans", (req, res) => {
+  const { studentName, keyword, subtopic, motivation, core1, core2, conclusion } = req.body;
+  if (!studentName || !subtopic) {
+    return res.status(400).json({ error: "필수 정보가 없어요." });
+  }
+
+  const now = new Date();
+  const timeStr = now.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '-').replace(/\./g, '') + ' ' + now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+  
+  const newPlan = {
+    id: `plan-${Date.now()}`,
+    studentName,
+    keyword: keyword || "",
+    subtopic,
+    motivation: motivation || "",
+    core1: core1 || "",
+    core2: core2 || "",
+    conclusion: conclusion || "",
+    createdAt: timeStr
+  };
+
+  plansDb.unshift(newPlan);
+  res.json({ success: true, plan: newPlan });
+});
+
 // Configure Vite middleware for development or serve production builds
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
